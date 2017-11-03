@@ -81,23 +81,23 @@ export default class Transaction extends EventEmitter {
   }
 
   begin(conn) {
-    return this.query(conn, 'BEGIN;')
+    return this.query(conn, 'BEGIN')
   }
 
   savepoint(conn) {
-    return this.query(conn, `SAVEPOINT ${this.txid};`)
+    return this.query(conn, `SAVEPOINT ${this.txid}`)
   }
 
   commit(conn, value) {
-    return this.query(conn, 'COMMIT;', 1, value)
+    return this.query(conn, 'COMMIT', 1, value)
   }
 
   release(conn, value) {
-    return this.query(conn, `RELEASE SAVEPOINT ${this.txid};`, 1, value)
+    return this.query(conn, `RELEASE SAVEPOINT ${this.txid}`, 1, value)
   }
 
   rollback(conn, error) {
-    return this.query(conn, 'ROLLBACK;', 2, error)
+    return this.query(conn, 'ROLLBACK', 2, error)
       .timeout(5000)
       .catch(Promise.TimeoutError, () => {
         this._resolver();
